@@ -167,21 +167,9 @@ void App::Run(ILayoutPtr layout) {
             else if (kn == "KEY_RESIZE") {
                 resizeAt = App::Now() + REDRAW_DEBOUNCE_MS;
             }
-            else if (this->state.input &&
-                     this->state.input->GetInputMode() == IInput::InputRaw) 
-            {
-                this->state.input->Write(kn);
-            }
-            else if (!keyHandler || !keyHandler(kn)) {
-                bool processed = false;
-                if (this->state.input) {
-                    processed = this->state.input->Write(kn);
-                }
-
-                /* otherwise, send the unhandled keypress directly to the
-                focused window. if it can't do anything with it, send it to
-                the layout for special processing, if necessary */
-                if (!processed) {
+            /* order: focused input, global key handler, then layout. */
+            else if (!this->state.input || !this->state.input->Write(kn)) {
+                if (!keyHandler || !keyHandler(kn)) {
                     if (!this->state.keyHandler || !this->state.keyHandler->KeyPress(kn)) {
                         this->state.layout->KeyPress(kn);
                     }
@@ -194,7 +182,7 @@ void App::Run(ILayoutPtr layout) {
         if (resizeAt && App::Now() > resizeAt) {
             resize_term(0, 0);
             Window::Invalidate();
-            
+
             if (this->resizeHandler) {
                 this->resizeHandler();
             }
