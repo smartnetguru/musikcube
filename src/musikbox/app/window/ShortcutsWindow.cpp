@@ -92,7 +92,7 @@ void ShortcutsWindow::SetActive(Hotkeys::Id id) {
 
 void ShortcutsWindow::UpdateContentColor() {
     this->SetContentColor(this->IsFocused()
-        ? CURSESPP_BUTTON_NEGATIVE
+        ? CURSESPP_SHORTCUT_ROW_FOCUSED
         : CURSESPP_SELECTED_LIST_ITEM);
 }
 

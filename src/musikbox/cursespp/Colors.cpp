@@ -128,4 +128,6 @@ void Colors::Init() {
     init_pair(CURSESPP_BUTTON_NORMAL, black, yellow);
     init_pair(CURSESPP_BUTTON_NEGATIVE, yellow, red);
     init_pair(CURSESPP_BUTTON_HIGHLIGHTED, black, green);
+
+    init_pair(CURSESPP_SHORTCUT_ROW_FOCUSED, red, black);
 }
