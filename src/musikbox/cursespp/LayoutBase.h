@@ -41,7 +41,13 @@
 #include <vector>
 
 namespace cursespp {
-    class LayoutBase : public Window, public ILayout {
+    class LayoutBase : 
+        public Window,
+#if (__clang_major__ == 7 && __clang_minor__ == 3)
+        public std::enable_shared_from_this<LayoutBase>,
+#endif
+        public ILayout
+    {
         public:
             LayoutBase(IWindow* parent = NULL);
             virtual ~LayoutBase();
