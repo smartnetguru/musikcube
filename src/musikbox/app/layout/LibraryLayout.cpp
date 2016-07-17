@@ -169,6 +169,10 @@ void LibraryLayout::SetShortcutsWindow(ShortcutsWindow* shortcuts) {
 
 void LibraryLayout::UpdateShortcutsWindow() {
     if (this->shortcuts) {
+        if (this->shortcuts->IsFocused() && this->visibleLayout) {
+            this->visibleLayout->SetFocus(IWindowPtr());
+        }
+
         if (this->visibleLayout == this->browseLayout) {
             this->shortcuts->SetActive(Hotkeys::NavigateLibraryBrowse);
         }

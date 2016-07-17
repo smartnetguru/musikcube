@@ -93,7 +93,7 @@ void ShortcutsWindow::SetActive(Hotkeys::Id id) {
 void ShortcutsWindow::UpdateContentColor() {
     this->SetContentColor(this->IsFocused()
         ? CURSESPP_SHORTCUT_ROW_FOCUSED
-        : CURSESPP_SELECTED_LIST_ITEM);
+        : CURSESPP_SHORTCUT_ROW_NORMAL);
 }
 
 void ShortcutsWindow::Repaint() {

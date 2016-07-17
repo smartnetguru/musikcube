@@ -61,6 +61,10 @@ void MainLayout::Layout() {
     if (this->layout) {
         this->layout->MoveAndResize(0, 0, cx, cy - 1);
         this->layout->Layout();
+
+        if (this->shortcutsFocused) {
+            this->layout->SetFocus(IWindowPtr());
+        }
     }
 
     this->shortcuts->MoveAndResize(0, cy - 1, cx, 1);
@@ -138,9 +142,16 @@ bool MainLayout::KeyPress(const std::string& key) {
         else {
             this->shortcuts->Blur();
 
-            if (this->layout && this->lastFocus) {
-                this->layout->SetFocus(this->lastFocus);
-                this->lastFocus.reset();
+            if (this->layout) {
+                bool refocused = false;
+                if (this->lastFocus) {
+                    refocused = this->layout->SetFocus(this->lastFocus);
+                    this->lastFocus.reset();
+                }
+
+                if (!refocused) {
+                    this->layout->FocusNext();
+                }
             }
         }
 
