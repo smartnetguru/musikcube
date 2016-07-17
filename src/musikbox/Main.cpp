@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
         
         Main mainLayout(new MainLayout());
         mainLayout->Layout();
-        mainLayout->SetMainLayout(consoleLayout);
+        mainLayout->SetMainLayout(libraryLayout);
 
         app.SetKeyHandler([&](const std::string& kn) {
             if (Hotkeys::Is(Hotkeys::NavigateConsole, kn)) {

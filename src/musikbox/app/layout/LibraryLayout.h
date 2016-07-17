@@ -64,6 +64,7 @@ namespace musik {
                 virtual cursespp::IWindowPtr FocusNext();
                 virtual cursespp::IWindowPtr FocusPrev();
                 virtual cursespp::IWindowPtr GetFocus();
+                virtual bool SetFocus(cursespp::IWindowPtr window);
 
                 virtual bool KeyPress(const std::string& key);
 

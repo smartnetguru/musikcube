@@ -200,6 +200,10 @@ IWindowPtr LibraryLayout::GetFocus() {
     return this->visibleLayout->GetFocus();
 }
 
+bool LibraryLayout::SetFocus(cursespp::IWindowPtr window) {
+    return this->visibleLayout->SetFocus(window);
+}
+
 bool LibraryLayout::KeyPress(const std::string& key) {
     if (key == "^[") { /* switches between browse/now playing */
         if (this->visibleLayout != this->browseLayout) {

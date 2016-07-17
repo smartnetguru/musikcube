@@ -59,6 +59,7 @@ namespace cursespp {
             virtual IWindowPtr FocusNext();
             virtual IWindowPtr FocusPrev();
             virtual IWindowPtr GetFocus();
+            virtual bool SetFocus(IWindowPtr window);
             virtual ILayoutStack* GetLayoutStack();
             virtual void SetLayoutStack(ILayoutStack* stack);
 
@@ -72,9 +73,6 @@ namespace cursespp {
             virtual bool RemoveWindow(IWindowPtr window);
             virtual size_t GetWindowCount();
             virtual IWindowPtr GetWindowAt(size_t position);
-
-        protected:
-            bool SetFocus(IWindowPtr window);
 
         private:
             void AddFocusable(IWindowPtr window);
