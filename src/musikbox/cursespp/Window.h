@@ -91,6 +91,7 @@ namespace cursespp {
             void PostMessage(int messageType, int64 user1 = 0, int64 user2 = 0, int64 delay = 0);
             void RemoveMessage(int messageType);
             bool IsVisible();
+            bool IsFocused();
             void Create();
             void Destroy();
             void Recreate();
@@ -98,6 +99,7 @@ namespace cursespp {
 
             virtual void OnDimensionsChanged();
             virtual void OnVisibilityChanged(bool visible);
+            virtual void OnFocusChanged(bool focused);
 
         private:
             IWindow* parent;
@@ -106,7 +108,7 @@ namespace cursespp {
             PANEL* contentPanel;
             WINDOW* content;
             bool drawFrame;
-            bool isVisible;
+            bool isVisible, isFocused;
             int focusOrder;
             int id;
             int64 contentColor, frameColor;

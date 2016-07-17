@@ -64,7 +64,11 @@ namespace musik {
 
                 virtual void Repaint();
 
+            protected:
+                virtual void OnFocusChanged(bool focused);
+
             private:
+                void UpdateContentColor();
 
                 struct Entry {
                     Entry(const std::string& key, const std::string& desc, int64 attrs = -1) {

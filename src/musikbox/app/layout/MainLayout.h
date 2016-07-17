@@ -56,6 +56,7 @@ namespace musik {
 
                 virtual void Layout();
                 virtual bool KeyPress(const std::string& key);
+                virtual cursespp::IWindowPtr GetFocus();
                 
                 void SetMainLayout(std::shared_ptr<cursespp::LayoutBase> layout);
 
@@ -64,6 +65,7 @@ namespace musik {
 
                 std::shared_ptr<ShortcutsWindow> shortcuts;
                 std::shared_ptr<cursespp::LayoutBase> layout;
+                bool shortcutsFocused;
         };
     }
 }

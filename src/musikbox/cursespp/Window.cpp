@@ -83,7 +83,7 @@ Window::Window(IWindow *parent) {
     this->contentColor = CURSESPP_DEFAULT_CONTENT_COLOR;
     this->frameColor = CURSESPP_DEFAULT_FRAME_COLOR;
     this->drawFrame = true;
-    this->isVisible = false;
+    this->isVisible = this->isFocused = false;
     this->focusOrder = -1;
     this->id = NEXT_ID++;
 }
@@ -103,6 +103,10 @@ void Window::ProcessMessage(IMessage &message) {
 
 bool Window::IsVisible() {
     return this->isVisible;
+}
+
+bool Window::IsFocused() {
+    return this->isFocused;
 }
 
 void Window::BringToTop() {
@@ -207,6 +211,10 @@ void Window::OnDimensionsChanged() {
 }
 
 void Window::OnVisibilityChanged(bool visible) {
+    /* for subclass use */
+}
+
+void Window::OnFocusChanged(bool focused) {
     /* for subclass use */
 }
 
@@ -450,9 +458,15 @@ void Window::Repaint() {
 }
 
 void Window::Focus() {
-
+    if (!this->isFocused) {
+        this->isFocused = true;
+        this->OnFocusChanged(true);
+    }
 }
 
 void Window::Blur() {
-
+    if (this->isFocused) {
+        this->isFocused = false;
+        this->OnFocusChanged(false);
+    }
 }

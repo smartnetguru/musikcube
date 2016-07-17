@@ -42,7 +42,8 @@ using namespace musik::box;
 using namespace cursespp;
 
 MainLayout::MainLayout()
-: LayoutBase() {
+: shortcutsFocused(false)
+, LayoutBase() {
     this->Initialize();
 }
 
@@ -58,12 +59,24 @@ void MainLayout::Layout() {
         this->layout->Layout();
     }
 
-    //this->shortcuts->MoveAndResize(0, cy - 1, cx, 1);
+    this->shortcuts->MoveAndResize(0, cy - 1, cx, 1);
 }
 
 void MainLayout::Initialize() {
-    //this->shortcuts.reset(new ShortcutsWindow());
-    //this->AddWindow(this->shortcuts);
+    this->shortcuts.reset(new ShortcutsWindow());
+    this->AddWindow(this->shortcuts);
+}
+
+cursespp::IWindowPtr MainLayout::GetFocus() {
+    if (this->shortcutsFocused) {
+        return this->shortcuts;
+    }
+
+    if (this->layout) {
+        return this->layout->GetFocus();
+    }
+
+    return cursespp::IWindowPtr();
 }
 
 void MainLayout::SetMainLayout(std::shared_ptr<cursespp::LayoutBase> layout) {
@@ -73,13 +86,24 @@ void MainLayout::SetMainLayout(std::shared_ptr<cursespp::LayoutBase> layout) {
             this->layout->Hide();
         }
 
-        this->AddWindow(layout);
         this->layout = layout;
+        this->AddWindow(layout);
+        this->layout->SetFocusOrder(0);
         this->Show();
         this->Layout();
     }
 }
 
 bool MainLayout::KeyPress(const std::string& key) {
+    if (key == "^[") {
+        this->shortcutsFocused = !this->shortcutsFocused;
+
+        this->shortcutsFocused 
+            ? this->shortcuts->Focus() 
+            : this->shortcuts->Blur();
+
+        return true;
+    }
+
     return this->layout ? this->layout->KeyPress(key) : false;
 }
