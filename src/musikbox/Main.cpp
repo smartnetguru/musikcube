@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
     musik::debug::init();
 
     LibraryPtr library = LibraryFactory::Libraries().at(0);
-    
+
     GaplessTransport transport;
     PlaybackService playback(library, transport);
 
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
         Layout libraryLayout(new LibraryLayout(playback, library));
         Layout consoleLayout(new ConsoleLayout(transport, library));
         Layout settingsLayout(new SettingsLayout(library));
-        
+
         Main mainLayout(new MainLayout());
         mainLayout->Layout();
         mainLayout->SetMainLayout(libraryLayout);
