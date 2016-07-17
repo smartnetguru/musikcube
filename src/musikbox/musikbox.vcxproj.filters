@@ -330,6 +330,9 @@
     <ClInclude Include="app\layout\SettingsLayout.h">
       <Filter>app\layout</Filter>
     </ClInclude>
+    <ClInclude Include="app\layout\ITopLevelLayout.h">
+      <Filter>app\layout</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cursespp">

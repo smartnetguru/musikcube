@@ -59,6 +59,8 @@ namespace musik {
                     const std::string& description,
                     int64 attrs = -1);
 
+                void RemoveAll();
+
                 void SetActive(const std::string& key);
                 void SetActive(Hotkeys::Id id);
 

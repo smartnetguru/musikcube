@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\layout\BrowseLayout.h" />
+    <ClInclude Include="app\layout\ITopLevelLayout.h" />
     <ClInclude Include="app\layout\LibraryLayout.h" />
     <ClInclude Include="app\layout\ConsoleLayout.h" />
     <ClInclude Include="app\layout\NowPlayingLayout.h" />

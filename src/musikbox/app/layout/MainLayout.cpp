@@ -43,6 +43,7 @@ using namespace cursespp;
 
 MainLayout::MainLayout()
 : shortcutsFocused(false)
+, topLevelLayout(nullptr)
 , LayoutBase() {
     this->Initialize();
 }
@@ -80,11 +81,11 @@ cursespp::IWindowPtr MainLayout::GetFocus() {
 }
 
 IWindowPtr MainLayout::FocusNext() {
-    return (this->shortcutsFocused) 
+    return (this->shortcutsFocused)
         ? this->shortcuts : this->layout->FocusNext();
 }
 IWindowPtr MainLayout::FocusPrev() {
-    return (this->shortcutsFocused) 
+    return (this->shortcutsFocused)
         ? this->shortcuts : this->layout->FocusPrev();
 }
 
@@ -100,7 +101,18 @@ void MainLayout::SetMainLayout(std::shared_ptr<cursespp::LayoutBase> layout) {
             this->lastFocus.reset();
         }
 
+        if (this->topLevelLayout) {
+            this->topLevelLayout->SetShortcutsWindow(nullptr);
+        }
+
         this->layout = layout;
+        this->topLevelLayout = dynamic_cast<ITopLevelLayout*>(layout.get());
+
+        this->shortcuts->RemoveAll();
+        if (this->topLevelLayout) {
+            this->topLevelLayout->SetShortcutsWindow(this->shortcuts.get());
+        }
+
         this->AddWindow(layout);
         this->layout->SetFocusOrder(0);
         this->Show();
@@ -122,18 +134,28 @@ bool MainLayout::KeyPress(const std::string& key) {
         }
         else {
             this->shortcuts->Blur();
-            
+
             if (this->layout && this->lastFocus) {
                 this->layout->SetFocus(this->lastFocus);
                 this->lastFocus.reset();
             }
         }
 
-        this->shortcutsFocused 
-            ? this->shortcuts->Focus() 
+        this->shortcutsFocused
+            ? this->shortcuts->Focus()
             : this->shortcuts->Blur();
 
         return true;
+    }
+
+    if (this->shortcutsFocused) {
+        if (key == "KEY_DOWN" || key == "KEY_LEFT" ||
+            key == "KEY_UP" || key == "KEY_RIGHT")
+        {
+            /* layouts allow focusing via TAB and sometimes arrow
+            keys. suppress these from bubbling. */
+            return true;
+        }
     }
 
     return this->layout ? this->layout->KeyPress(key) : false;

@@ -34,45 +34,14 @@
 
 #pragma once
 
-#include <cursespp/LayoutBase.h>
-#include <cursespp/TextInput.h>
-
 #include <app/window/ShortcutsWindow.h>
-
-#include "ITopLevelLayout.h"
-
-#include <sigslot/sigslot.h>
 
 namespace musik {
     namespace box {
-        class MainLayout :
-            public cursespp::LayoutBase,
-#if (__clang_major__ == 7 && __clang_minor__ == 3)
-            public std::enable_shared_from_this<MainLayout>,
-#endif
-            public sigslot::has_slots<>
-        {
+        class ITopLevelLayout {
             public:
-                MainLayout();
-                virtual ~MainLayout();
-
-                virtual void Layout();
-                virtual bool KeyPress(const std::string& key);
-
-                virtual cursespp::IWindowPtr GetFocus();
-                virtual cursespp::IWindowPtr FocusNext();
-                virtual cursespp::IWindowPtr FocusPrev();
-
-                void SetMainLayout(std::shared_ptr<cursespp::LayoutBase> layout);
-
-            private:
-                void Initialize();
-
-                std::shared_ptr<ShortcutsWindow> shortcuts;
-                std::shared_ptr<cursespp::LayoutBase> layout;
-                cursespp::IWindowPtr lastFocus;
-                ITopLevelLayout* topLevelLayout;
-                bool shortcutsFocused;
+                virtual ~ITopLevelLayout() { }
+                virtual void SetShortcutsWindow(ShortcutsWindow* w) = 0;
         };
     }
 }

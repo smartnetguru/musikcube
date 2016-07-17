@@ -71,6 +71,11 @@ void ShortcutsWindow::AddShortcut(
     this->AddShortcut(Hotkeys::Get(id), description, attrs);
 }
 
+void ShortcutsWindow::RemoveAll() {
+    this->entries.clear();
+    this->Repaint();
+}
+
 void ShortcutsWindow::SetActive(const std::string& key) {
     this->activeKey = key;
     this->Repaint();
@@ -93,7 +98,6 @@ void ShortcutsWindow::UpdateContentColor() {
 
 void ShortcutsWindow::Repaint() {
     Window::Repaint();
-
 
     this->Clear();
 

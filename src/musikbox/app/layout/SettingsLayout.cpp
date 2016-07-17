@@ -91,8 +91,6 @@ void SettingsLayout::Layout() {
     int x = this->GetX(), y = this->GetY();
     int cx = this->GetWidth(), cy = this->GetHeight();
 
-    this->shortcuts->MoveAndResize(0, cy - 1, cx, LABEL_HEIGHT);
-
     int startY = 0;
     int leftX = 0;
     int leftWidth = cx / 3; /* 1/3 width */
@@ -112,8 +110,8 @@ void SettingsLayout::Layout() {
     this->removeCheckbox->MoveAndResize(1, BOTTOM(this->dotfileCheckbox), cx - 1, LABEL_HEIGHT);
 
     this->hotkeyLabel->MoveAndResize(
-        1, 
-        BOTTOM(this->removeCheckbox) + 2, 
+        1,
+        BOTTOM(this->removeCheckbox) + 2,
         this->hotkeyLabel->Length(),
         LABEL_HEIGHT);
 
@@ -188,11 +186,6 @@ void SettingsLayout::InitializeWindows() {
     this->removeCheckbox->SetText("remove missing files from library");
     this->removeCheckbox->CheckChanged.connect(this, &SettingsLayout::OnRemoveMissingCheckChanged);
 
-    this->shortcuts.reset(new ShortcutsWindow());
-    this->shortcuts->AddShortcut(Hotkeys::NavigateLibrary, "library");
-    this->shortcuts->AddShortcut(Hotkeys::NavigateConsole, "console");
-    this->shortcuts->AddShortcut("^D", "quit");
-
     this->hotkeyLabel.reset(new TextLabel());
     this->hotkeyLabel->SetText("hotkey tester: ");
     this->hotkeyInput.reset(new TextInput(IInput::InputRaw));
@@ -209,9 +202,16 @@ void SettingsLayout::InitializeWindows() {
     this->AddWindow(this->addedPathsList);
     this->AddWindow(this->dotfileCheckbox);
     this->AddWindow(this->removeCheckbox);
-    this->AddWindow(this->shortcuts);
     this->AddWindow(this->hotkeyLabel);
     this->AddWindow(this->hotkeyInput);
+}
+
+void SettingsLayout::SetShortcutsWindow(ShortcutsWindow* shortcuts) {
+    if (shortcuts) {
+        shortcuts->AddShortcut(Hotkeys::NavigateLibrary, "library");
+        shortcuts->AddShortcut(Hotkeys::NavigateConsole, "console");
+        shortcuts->AddShortcut("^D", "quit");
+    }
 }
 
 void SettingsLayout::OnVisibilityChanged(bool visible) {

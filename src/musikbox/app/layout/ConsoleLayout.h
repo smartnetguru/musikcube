@@ -49,12 +49,18 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "ITopLevelLayout.h"
+
 namespace musik {
     namespace box {
-        class ConsoleLayout : public cursespp::LayoutBase, public sigslot::has_slots<> {
+        class ConsoleLayout :
+            public cursespp::LayoutBase,
+            public ITopLevelLayout,
+            public sigslot::has_slots<>
+        {
             public:
                 ConsoleLayout(
-                    musik::core::audio::ITransport& transport, 
+                    musik::core::audio::ITransport& transport,
                     musik::core::LibraryPtr library);
 
                 ~ConsoleLayout();
@@ -62,6 +68,8 @@ namespace musik {
                 virtual void Layout();
                 virtual void Show();
                 virtual void ProcessMessage(cursespp::IMessage &message);
+
+                void SetShortcutsWindow(ShortcutsWindow* shortcuts);
 
             private:
                 void UpdateWindows();
@@ -82,7 +90,6 @@ namespace musik {
                 std::shared_ptr<cursespp::TextInput> commands;
                 std::shared_ptr<OutputWindow> output;
                 std::shared_ptr<ResourcesWindow> resources;
-                std::shared_ptr<ShortcutsWindow> shortcuts;
                 musik::core::audio::ITransport& transport;
                 musik::core::LibraryPtr library;
         };
