@@ -103,6 +103,10 @@ App::App(const std::string& title) {
     refresh();
     curs_set(0);
 
+#ifndef WIN32
+    set_escdelay(50);
+#endif
+
 #ifdef __PDCURSES__
     PDC_set_title(title.c_str());
 #endif
