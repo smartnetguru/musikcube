@@ -237,6 +237,7 @@ void SettingsLayout::OnVisibilityChanged(bool visible) {
 
 void SettingsLayout::LoadPreferences() {
     this->removeCheckbox->SetChecked(this->prefs->GetBool(INDEXER_PREFS_REMOVE_MISSING_FILES, true));
+    this->focusShortcuts->SetChecked(this->prefs->GetBool(GENERAL_PREFS_FOCUS_SHORTCUTS));
 }
 
 void SettingsLayout::AddSelectedDirectory() {
