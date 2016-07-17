@@ -48,6 +48,11 @@ using namespace musik::core::library::constants;
 
 #define TRANSPORT_HEIGHT 3
 
+
+#define SHOULD_REFOCUS(target) \
+    (this->visibleLayout == target) && \
+    (this->shortcuts && !this->shortcuts->IsFocused())
+
 using namespace musik::core;
 using namespace musik::core::audio;
 using namespace musik::core::library;
@@ -128,13 +133,13 @@ void LibraryLayout::ShowBrowse() {
 }
 
 void LibraryLayout::ShowSearch() {
-    this->visibleLayout == this->searchLayout
+    SHOULD_REFOCUS(this->searchLayout)
         ? this->searchLayout->FocusInput()
         : this->ChangeMainLayout(this->searchLayout);
 }
 
 void LibraryLayout::ShowTrackSearch() {
-    this->visibleLayout == this->trackSearch
+    SHOULD_REFOCUS(this->trackSearch)
         ? this->trackSearch->FocusInput()
         : this->ChangeMainLayout(this->trackSearch);
 }
