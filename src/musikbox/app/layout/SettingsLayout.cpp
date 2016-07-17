@@ -68,7 +68,7 @@ SettingsLayout::SettingsLayout(musik::core::LibraryPtr library)
 : LayoutBase()
 , library(library)
 , indexer(library->Indexer()) {
-    this->prefs = Preferences::ForComponent(INDEXER_PREFS_COMPONENT);
+    this->prefs = Preferences::ForComponent(GENERAL_PREFS_COMPONENT);
     this->indexer->PathsUpdated.connect(this, &SettingsLayout::RefreshAddedPaths);
     this->InitializeWindows();
 }
@@ -78,6 +78,11 @@ SettingsLayout::~SettingsLayout() {
 
 void SettingsLayout::OnRemoveMissingCheckChanged(cursespp::Checkbox* cb, bool checked) {
     this->prefs->SetBool(INDEXER_PREFS_REMOVE_MISSING_FILES, checked);
+    this->prefs->Save();
+}
+
+void SettingsLayout::OnFocusShortcutsCheckChanged(cursespp::Checkbox* cb, bool checked) {
+    this->prefs->SetBool(GENERAL_PREFS_FOCUS_SHORTCUTS, checked);
     this->prefs->Save();
 }
 
@@ -108,16 +113,17 @@ void SettingsLayout::Layout() {
 
     this->dotfileCheckbox->MoveAndResize(1, BOTTOM(this->browseList), cx - 1, LABEL_HEIGHT);
     this->removeCheckbox->MoveAndResize(1, BOTTOM(this->dotfileCheckbox), cx - 1, LABEL_HEIGHT);
+    this->focusShortcuts->MoveAndResize(1, BOTTOM(this->removeCheckbox), cx - 1, LABEL_HEIGHT);
 
     this->hotkeyLabel->MoveAndResize(
         1,
-        BOTTOM(this->removeCheckbox) + 2,
+        BOTTOM(this->focusShortcuts) + 2,
         this->hotkeyLabel->Length(),
         LABEL_HEIGHT);
 
     this->hotkeyInput->MoveAndResize(
         RIGHT(this->hotkeyLabel),
-        BOTTOM(this->removeCheckbox) + 1,
+        BOTTOM(this->focusShortcuts) + 1,
         HOTKEY_INPUT_WIDTH,
         INPUT_HEIGHT);
 }
@@ -186,6 +192,10 @@ void SettingsLayout::InitializeWindows() {
     this->removeCheckbox->SetText("remove missing files from library");
     this->removeCheckbox->CheckChanged.connect(this, &SettingsLayout::OnRemoveMissingCheckChanged);
 
+    this->focusShortcuts.reset(new cursespp::Checkbox());
+    this->focusShortcuts->SetText("esc key focuses the shortcuts bar");
+    this->focusShortcuts->CheckChanged.connect(this, &SettingsLayout::OnFocusShortcutsCheckChanged);
+
     this->hotkeyLabel.reset(new TextLabel());
     this->hotkeyLabel->SetText("hotkey tester: ");
     this->hotkeyInput.reset(new TextInput(IInput::InputRaw));
@@ -194,7 +204,8 @@ void SettingsLayout::InitializeWindows() {
     this->addedPathsList->SetFocusOrder(1);
     this->dotfileCheckbox->SetFocusOrder(2);
     this->removeCheckbox->SetFocusOrder(3);
-    this->hotkeyInput->SetFocusOrder(4);
+    this->focusShortcuts->SetFocusOrder(4);
+    this->hotkeyInput->SetFocusOrder(5);
 
     this->AddWindow(this->browseLabel);
     this->AddWindow(this->addedPathsLabel);
@@ -202,6 +213,7 @@ void SettingsLayout::InitializeWindows() {
     this->AddWindow(this->addedPathsList);
     this->AddWindow(this->dotfileCheckbox);
     this->AddWindow(this->removeCheckbox);
+    this->AddWindow(this->focusShortcuts);
     this->AddWindow(this->hotkeyLabel);
     this->AddWindow(this->hotkeyInput);
 }
