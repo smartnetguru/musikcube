@@ -66,8 +66,8 @@ namespace musik {
                 ~ConsoleLayout();
 
                 virtual void Layout();
-                virtual void Show();
                 virtual void ProcessMessage(cursespp::IMessage &message);
+                virtual void OnVisibilityChanged(bool visible);
 
                 void SetShortcutsWindow(ShortcutsWindow* shortcuts);
 

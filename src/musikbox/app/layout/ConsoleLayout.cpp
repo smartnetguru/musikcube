@@ -83,8 +83,6 @@ ConsoleLayout::ConsoleLayout(ITransport& transport, LibraryPtr library)
     this->commands->EnterPressed.connect(this, &ConsoleLayout::OnEnterPressed);
 
     this->Help();
-
-    this->PostMessage(MESSAGE_TYPE_UPDATE, 0, 0, UPDATE_INTERVAL_MS);
 }
 
 ConsoleLayout::~ConsoleLayout() {
@@ -134,9 +132,17 @@ void ConsoleLayout::OnEnterPressed(TextInput *input) {
     }
 }
 
-void ConsoleLayout::Show() {
-    LayoutBase::Show();
-    this->UpdateWindows();
+void ConsoleLayout::OnVisibilityChanged(bool visible) {
+    LayoutBase::OnVisibilityChanged(visible);
+
+    if (visible) {
+        this->UpdateWindows();
+        this->RemoveMessage(MESSAGE_TYPE_UPDATE);
+        this->PostMessage(MESSAGE_TYPE_UPDATE, 0, 0, UPDATE_INTERVAL_MS);
+    }
+    else {
+        this->RemoveMessage(MESSAGE_TYPE_UPDATE);
+    }
 }
 
 void ConsoleLayout::ProcessMessage(IMessage &message) {
