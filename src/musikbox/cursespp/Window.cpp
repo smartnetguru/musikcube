@@ -170,12 +170,8 @@ void Window::MoveAndResize(int x, int y, int width, int height) {
             this->Recreate();
         }
 
-        if (sizeChanged) {
-            this->OnSizeChanged();
-        }
-
-        if (positionChanged) {
-            this->OnPositionChanged();
+        if (sizeChanged || positionChanged) {
+            this->OnDimensionsChanged();
         }
     }
 }
@@ -189,7 +185,7 @@ void Window::SetSize(int width, int height) {
             this->Recreate();
         }
 
-        this->OnSizeChanged();
+        this->OnDimensionsChanged();
     }
 }
 
@@ -202,16 +198,12 @@ void Window::SetPosition(int x, int y) {
             this->Recreate();
         }
 
-        this->OnPositionChanged();
+        this->OnDimensionsChanged();
     }
 }
 
-void Window::OnPositionChanged() {
-    /* for subclass use */
-}
-
-void Window::OnSizeChanged() {
-    /* for subclass use */
+void Window::OnDimensionsChanged() {
+    this->Repaint();
 }
 
 void Window::OnVisibilityChanged(bool visible) {

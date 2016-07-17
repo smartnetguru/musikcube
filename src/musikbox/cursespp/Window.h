@@ -96,8 +96,7 @@ namespace cursespp {
             void Recreate();
             void Clear();
 
-            virtual void OnPositionChanged();
-            virtual void OnSizeChanged();
+            virtual void OnDimensionsChanged();
             virtual void OnVisibilityChanged(bool visible);
 
         private:

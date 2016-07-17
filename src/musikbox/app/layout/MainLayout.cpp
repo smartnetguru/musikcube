@@ -32,53 +32,54 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "stdafx.h"
 
-#include "IScrollable.h"
-#include "IScrollAdapter.h"
-#include "ScrollableWindow.h"
-#include <sigslot/sigslot.h>
+#include <cursespp/Screen.h>
 
-namespace cursespp {
-    class ListWindow :
-        public ScrollableWindow
-    #if (__clang_major__ == 7 && __clang_minor__ == 3)
-        , public std::enable_shared_from_this<ListWindow>
-    #endif
-     {
-        public:
-            static size_t NO_SELECTION;
+#include "MainLayout.h"
 
-            sigslot::signal3<ListWindow*, size_t, size_t> SelectionChanged;
-            sigslot::signal2<ListWindow*, size_t> Invalidated;
+using namespace musik::box;
+using namespace cursespp;
 
-            ListWindow(IScrollAdapter* adapter = nullptr, IWindow *parent = nullptr);
-            virtual ~ListWindow();
+MainLayout::MainLayout()
+: LayoutBase() {
+    this->Initialize();
+}
 
-            virtual void ScrollToTop();
-            virtual void ScrollToBottom();
-            virtual void ScrollUp(int delta = 1);
-            virtual void ScrollDown(int delta = 1);
-            virtual void PageUp();
-            virtual void PageDown();
-            virtual void ScrollTo(size_t index);
+MainLayout::~MainLayout() {
+}
 
-            virtual size_t GetSelectedIndex();
-            virtual void SetSelectedIndex(size_t index);
+void MainLayout::Layout() {
+    size_t cx = Screen::GetWidth(), cy = Screen::GetHeight();
+    this->MoveAndResize(0, 0, cx, cy);
 
-            virtual void OnAdapterChanged();
+    if (this->layout) {
+        this->layout->MoveAndResize(0, 0, cx, cy - 1);
+        this->layout->Layout();
+    }
 
-        protected:
-            virtual void OnSelectionChanged(size_t newIndex, size_t oldIndex);
-            virtual void OnInvalidated();
-            virtual void OnDimensionsChanged();
+    //this->shortcuts->MoveAndResize(0, cy - 1, cx, 1);
+}
 
-            virtual IScrollAdapter& GetScrollAdapter();
-            virtual IScrollAdapter::ScrollPosition& GetScrollPosition();
+void MainLayout::Initialize() {
+    //this->shortcuts.reset(new ShortcutsWindow());
+    //this->AddWindow(this->shortcuts);
+}
 
-        private:
-            IScrollAdapter* adapter;
-            IScrollAdapter::ScrollPosition scrollPosition;
-            size_t selectedIndex;
-    };
+void MainLayout::SetMainLayout(std::shared_ptr<cursespp::LayoutBase> layout) {
+    if (layout != this->layout) {
+        if (this->layout) {
+            this->RemoveWindow(this->layout);
+            this->layout->Hide();
+        }
+
+        this->AddWindow(layout);
+        this->layout = layout;
+        this->Show();
+        this->Layout();
+    }
+}
+
+bool MainLayout::KeyPress(const std::string& key) {
+    return this->layout ? this->layout->KeyPress(key) : false;
 }

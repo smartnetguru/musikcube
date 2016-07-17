@@ -68,10 +68,8 @@ LibraryLayout::~LibraryLayout() {
 }
 
 void LibraryLayout::Layout() {
-    int x = 0, y = 0;
-    int cx = Screen::GetWidth(), cy = Screen::GetHeight();
-
-    this->MoveAndResize(x, y, cx, cy);
+    int x = this->GetX(), y = this->GetY();
+    int cx = this->GetWidth(), cy = this->GetHeight();
 
     int mainHeight = cy - TRANSPORT_HEIGHT - SHORTCUTS_HEIGHT;
 
@@ -181,8 +179,6 @@ void LibraryLayout::InitializeWindows() {
 
     this->AddWindow(this->transportView);
     this->AddWindow(this->shortcuts);
-
-    this->Layout();
 }
 
 void LibraryLayout::OnSearchResultSelected(

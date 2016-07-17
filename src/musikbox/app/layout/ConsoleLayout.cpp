@@ -64,6 +64,8 @@ ConsoleLayout::ConsoleLayout(ITransport& transport, LibraryPtr library)
 : LayoutBase()
 , transport(transport)
 , library(library) {
+    this->SetFrameVisible(false);
+
     this->logs.reset(new LogWindow(this));
     this->output.reset(new OutputWindow(this));
     this->resources.reset(new ResourcesWindow(this));
@@ -92,22 +94,20 @@ ConsoleLayout::~ConsoleLayout() {
 }
 
 void ConsoleLayout::Layout() {
-    int cx = (int) Screen::GetWidth();
-    int cy = (int) Screen::GetHeight();
-
-    /* this layout */
-    this->MoveAndResize(0, 0, cx, cy);
-    this->SetFrameVisible(false);
+    int cx = this->GetWidth();
+    int cy = this->GetHeight();
+    int x = this->GetX();
+    int y = this->GetY();
 
     /* shortcuts at the bottom */
-    this->shortcuts->MoveAndResize(0, cy - 1, cx, 1);
+    this->shortcuts->MoveAndResize(x, cy - 1, cx, 1);
 
     /* top left */
-    this->output->MoveAndResize(0, 0, cx / 2, cy - 4);
+    this->output->MoveAndResize(x, y, cx / 2, cy - 4);
     this->output->SetFocusOrder(1);
 
     /* bottom left */
-    this->commands->MoveAndResize(0, cy - 4, cx / 2, 3);
+    this->commands->MoveAndResize(x, cy - 4, cx / 2, 3);
     this->commands->SetFocusOrder(0);
 
     /* top right */
